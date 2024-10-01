@@ -56,7 +56,7 @@ class InfrastructureServiceRegistry(object):
         self.infrastructure_registry["secret_store_provider"] = secret_store_provider
         self.infrastructure_registry["file_storage"] = FileStorageService(
             app_config,
-            self.infrastructure_registry["secret_store"].get_secret("cloud_storage_config"),
+            self.infrastructure_registry["secret_store_provider"].get_default().get_secret("cloud_storage_config"),
         )
 
     def init(self, app):

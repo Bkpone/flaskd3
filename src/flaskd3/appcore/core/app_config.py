@@ -14,6 +14,6 @@ def setup_config(app, config_module_map=None):
     if config_file_path:
         app.config.from_json(config_file_path, True)
         print("Loaded config from {}".format(config_file_path))
-    if app.config["ENABLE_PROFILING"]:
+    if app.config.get("ENABLE_PROFILING"):
         app.config["PREF_OUTPUT"] = open(os.path.join(app.config["LOG_ROOT"], app.config["PERF_FILE_NAME"]), "w")
         app.config["SQLALCHEMY_RECORD_QUERIES"] = True

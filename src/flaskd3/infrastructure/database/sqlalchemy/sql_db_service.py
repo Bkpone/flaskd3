@@ -18,7 +18,7 @@ db = SQLAlchemy()
 class SQLAlchemyDBService(BaseDBService):
     def __init__(self):
         self.db = db
-        self.migrate = Migrate(db=self.db, directory="flaskd3/appcore/migrations")
+        self.migrate = None
         self.db_password_setter = None
 
     def setup_temp_db_password_reset(self, db_password_setter):
@@ -80,10 +80,18 @@ class SQLAlchemyDBService(BaseDBService):
         )
         return profile_data
 
-    def init(self, app, config, db_password_setter=None):
+    def init(self, app, config=None, db_password_setter=None):
         if db_password_setter:
             self.setup_temp_db_password_reset(db_password_setter)
-        db_config = DBConfig(config)
+        db_config_input_dict = app.config.get("DB_CONFIG")
+        if not db_config_input_dict:
+            db_config_input_dict = dict()
+        os_env_config = DBConfig.get_config_from_os_env()
+        if os_env_config:
+            db_config_input_dict.update(os_env_config)
+        if config:
+            db_config_input_dict.update(config)
+        db_config = DBConfig(db_config_input_dict)
         if db_config.SSH_TUNNEL_CONFIG:
             import sshtunnel
             ssh_tunnel_config = json.loads(db_config.SSH_TUNNEL_CONFIG)
@@ -97,6 +105,7 @@ class SQLAlchemyDBService(BaseDBService):
             db_config.DB_MASTER_URL = "127.0.0.1"
             db_config.DB_PORT = tunnel.local_bind_port
         app.config["SQLALCHEMY_DATABASE_URI"] = db_config.get_url()
+        self.migrate = Migrate(db=self.db, directory=db_config.migration_path) if db_config.migration_path else Migrate(db=self.db)
         self.db.init_app(app)
         self.migrate.init_app(app)
 

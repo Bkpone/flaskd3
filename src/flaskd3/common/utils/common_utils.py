@@ -79,7 +79,7 @@ def get_sub_modules(module, suffix=None):
         sub_module_name = sub_module_name + suffix if suffix else sub_module_name
         try:
             sub_modules.append(importlib.import_module("." + sub_module_name, module.__name__))
-        except ModuleNotFoundError:
+        except ModuleNotFoundError as e:
             pass
     return sub_modules
 

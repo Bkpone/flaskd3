@@ -3,8 +3,8 @@ from abc import abstractmethod
 
 import requests
 
-from flaskd3.infrastructure.external_clients.core import constants
-from flaskd3.infrastructure.external_clients.core.base_response_object import (
+from flaskd3.infrastructure.external_clients import constants
+from flaskd3.infrastructure.external_clients.base_response_object import (
     BaseResponseObject,
 )
 

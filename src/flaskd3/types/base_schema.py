@@ -4,7 +4,7 @@ from marshmallow import Schema, fields
 from marshmallow.decorators import post_load
 
 from flaskd3.appcore.core.api_docs import ma_plugin
-from flaskd3.appcore.schema.schema_manager import SchemaManager
+from flaskd3.appcore.core.schema_manager import SchemaManager
 from flaskd3.types.base_entity import BaseEntity
 from flaskd3.types.base_enum import BaseEnum
 from flaskd3.types.value_object import BitMaskValueObject, ValueObject
@@ -57,7 +57,7 @@ class ValueObjectSchema(BaseSchema):
         return self.value_object_class.from_dict(data) if data is not None else None
 
 
-@ma_plugin.map_to_openapi_type(fields.String)
+#@ma_plugin.map_to_openapi_type(fields.String)
 class EnumField(fields.Field):
     def __init__(self, enum_class, **kwargs):
         if not issubclass(enum_class, BaseEnum):
@@ -91,7 +91,7 @@ class EnumField(fields.Field):
             self.fail("invalid-value")
 
 
-@ma_plugin.map_to_openapi_type(fields.Raw)
+#@ma_plugin.map_to_openapi_type(fields.Raw)
 class RawField(fields.Field):
     def _serialize(self, value, attr, data, **kwargs):
         return convert_key_to_camel_case(make_jsonify_ready(value))

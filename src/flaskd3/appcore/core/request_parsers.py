@@ -13,13 +13,12 @@ from marshmallow.exceptions import ValidationError
 from werkzeug.exceptions import UnsupportedMediaType
 
 from flaskd3.appcore.core.request_context import set_currency
-from flaskd3.appcore.schema.schema_manager import SchemaManager
+from flaskd3.appcore.core.schema_manager import SchemaManager
 from flaskd3.common.dtos.meta_dto import Meta
 from flaskd3.common.exceptions import ApiValidationException
 from flaskd3.common.money.constants import CurrencyType
 from flaskd3.common.utils.file_utils import (
     is_valid_filename,
-    validate_file_extensions,
 )
 
 logger = logging.getLogger(__name__)

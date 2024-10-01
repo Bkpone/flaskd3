@@ -17,6 +17,10 @@ from flaskd3.common.exceptions import ValidationException
 from flaskd3.common.utils.dateutils import from_string, to_string, to_string_hr, date_to_string
 
 
+class AppInformation(ValueObject):
+    app_name = ValueObjectField(str)
+
+
 class JobData(ValueObject):
     job_id = ValueObjectField(str)
     job_name = ValueObjectField(str)
@@ -59,7 +63,7 @@ class PhoneNumber(ValueObject):
     Phone number with country code
     """
 
-    _phone_regex = "^\+\d{1,3}-\d{9,10}$"
+    _allowed_phone_regex = ["\d{9,10}$", "^\+\d{0,3}\-\d{9,10}$"]
 
     def __init__(self, number, country_code):
         """
@@ -119,7 +123,10 @@ class PhoneNumber(ValueObject):
     def validate(cls, phone_number):
         if isinstance(phone_number, cls):
             phone_number = str(phone_number)
-        return True if re.search(cls._phone_regex, phone_number) else False
+        for reg_ex in cls._allowed_phone_regex:
+            if re.search(reg_ex, phone_number):
+                return True
+        return False
 
 
 class IDProof(ValueObject):

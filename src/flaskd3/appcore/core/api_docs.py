@@ -7,7 +7,7 @@ from apispec_webframeworks.flask import FlaskPlugin
 from flasgger import Swagger
 from marshmallow import Schema
 
-from flaskd3.appcore.schema.schema_manager import SchemaManager
+from flaskd3.appcore.core.schema_manager import SchemaManager
 
 
 ma_plugin = MarshmallowPlugin(schema_name_resolver=lambda schema: schema.__class__.__name__)
@@ -159,13 +159,14 @@ def setup_schema_definition(spec):
             continue
 
 
-def setup_paths(spec, api_module):
-    for name, obj in inspect.getmembers(api_module):
-        if inspect.isfunction(obj):
-            spec.path(view=obj)
+def setup_paths(spec, api_modules):
+    for api_module in api_modules:
+        for name, obj in inspect.getmembers(api_module):
+            if inspect.isfunction(obj):
+                spec.path(view=obj)
 
 
-def init_docs(app, app_name, api_module_path, advanced_options):
+def init_docs(app, app_name, api_module_paths, advanced_options):
     ctx = app.test_request_context()
     ctx.push()
 
@@ -178,7 +179,7 @@ def init_docs(app, app_name, api_module_path, advanced_options):
     spec = APISpec(title=app_name, version="1.0.0", openapi_version="3.0.2",
                    plugins=[FlaskPlugin(), ma_plugin], **advanced_options)
     setup_schema_definition(spec)
-    setup_paths(spec, api_module=api_module_path)
+    setup_paths(spec, api_modules=api_module_paths)
     swagger_config = Swagger.DEFAULT_CONFIG
     swagger_config["openapi"] = "3.0.2"
     swagger_config["ui_params"] = dict(displayRequestDuration=True)

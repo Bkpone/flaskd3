@@ -1,7 +1,7 @@
 from marshmallow import fields
 from marshmallow.decorators import post_load
 
-from flaskd3.appcore.schema.base_schema import (
+from flaskd3.types.base_schema import (
     BaseSchema,
     BitMaskValueObjectField,
     EnumField,
@@ -31,7 +31,6 @@ from flaskd3.common.value_objects import (
     DistanceInfo,
     DistanceWindow,
     GeoLocation,
-    IDProof,
     IntRange,
     MediaInfo,
     Name,

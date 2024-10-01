@@ -16,6 +16,12 @@ class AppCore:
         self.telemetry_logger_service = None
 
     def init(self, app, application_service_modules, domain_modules, acl_modules):
+        if not application_service_modules:
+            application_service_modules = list()
+        if not domain_modules:
+            domain_modules = list()
+        if not acl_modules:
+            acl_modules = list()
         self.infrastructure_service_registry = InfrastructureServiceRegistry(app.config, domain_modules)
         self.infrastructure_service_registry.init(app)
         self.repo_provider = self.infrastructure_service_registry.get_repo_provider()

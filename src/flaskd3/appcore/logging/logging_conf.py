@@ -17,7 +17,7 @@ def configure_logging(app):
 
     logging_conf = {
         "version": 1,
-        "filters": {"request_id": {"()": "flaskd3.appcore.core.logging.log_filters.RequestIdFilter"}},
+        "filters": {"request_id": {"()": "flaskd3.appcore.logging.log_filters.RequestIdFilter"}},
         "disable_existing_loggers": False,
         "formatters": {
             "verbose": {
